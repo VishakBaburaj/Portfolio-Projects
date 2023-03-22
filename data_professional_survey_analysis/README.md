@@ -16,6 +16,7 @@ https://docs.google.com/spreadsheets/d/1rau8clY4md4wYJyrEekmnjRKfGZL37iF/edit#gi
 
 ## Dashboard
 https://app.powerbi.com/view?r=eyJrIjoiMWIzOGI2NDgtZGE2YS00MTYzLWEzYzItZGM1MWQ4MTUxMDA3IiwidCI6ImI4ZTNmM2I3LWNkNGUtNDI0Ny1hOGIwLWEwZGIxOTYwODZmMiIsImMiOjF9
+
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Dashboard.png
 
 ## Description of the Data Source
@@ -33,12 +34,14 @@ Grouped other related roles into the “Current Roles” category and corrected 
 Added a new column called “Current roles cleaned” which consists of all the “Current Roles” with the “Other Roles” that were grouped under the “Current Roles” category.
 Step 4: Used a pivot table to determine the distribution of current roles in the sample size.
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.1.png
+
 Step 5:
 Cleaned the “Country” column by creating a new “Other Country” column by using the “Split Text to Columns” function.
 Grouped countries, and corrected spelling errors by using the find and replace tool.
 Added a new column called “Country Cleaned” which consists of the “Country” column with the “Other Country” column that was grouped.
 Step 6: Used a pivot table to determine the distribution of countries in the sample size.
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.2.png
+
 Step 7: Cleaned the “Favorite Programming Language” column by separating the “Other Favorite Programming Language” using the “Split Text to Columns” function.
 Step 8: Filtered and copied all data analyst respondents to another sheet to narrow down data to the project objective for further analysis.
 Step 9: Deleted columns that were added to clean certain columns and renamed the remaining columns for clarity.
@@ -62,12 +65,16 @@ https://devoworx.net/power-bi-custom-sort-order-bar-chart/
 To further analyze the data, the following questions were answered:
 1. What is the satisfaction level with work-life balance among data analysts in the United States?
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.3.png
+
 2. What is the satisfaction level with upward mobility among data analysts in the United States?
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.4.png
+
 3. What is the preferred programming language among data analysts in the United States?
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.5.png
+
 4. What is the difficulty level of transitioning into a data analyst role from a different career path in the United States?
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.6.png
+
 The visualizations created provide insights into the answers to these questions and reveal trends in the data analyst community in the United States.
 
 ## Key Findings
@@ -83,6 +90,9 @@ The visualizations created provide insights into the answers to these questions 
 
 ## Appendix
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.7.png
+
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.8.png
+
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.9.png
+
 https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.10.png
