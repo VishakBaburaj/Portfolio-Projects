@@ -13,8 +13,9 @@ SELECT * FROM sales.customers;      # 3 attributes - customer_code, customer_nam
 SELECT * FROM sales.date;			# 5 attributes - date, cy_date, year, month_name, date_yy_mmm.
 SELECT * FROM sales.markets;		# 3 attributes - markets_code, markets_name, zone.
 SELECT * FROM sales.products;		# 2 attributes - product_code product_type.
-SELECT * FROM sales.transactions;	# 10 attributes - product_code, customer_code, market_code, order_date, sales_qry, 
-									# sales_amount, currency, profit_margin_percentage, profit_margin, cost_price.
+SELECT * FROM sales.transactions;	
+# 10 attributes - product_code, customer_code, market_code, order_date, sales_qry, 
+# sales_amount, currency, profit_margin_percentage, profit_margin, cost_price.
 
 # Exploring the number of observations in each table
 SELECT COUNT(*) AS number_of_rows
@@ -35,16 +36,18 @@ FROM sales.transactions;			# 148395 observations
 #---------------------------------------------------------------
 CREATE VIEW sales.atliq_retrieved_sales_data
 AS
-SELECT c.custmer_name,
-	   t.sales_amount, sales_qty, currency,
+SELECT t.sales_amount, sales_qty, currency,
+	   c.custmer_name,
        m.markets_name,
        d.date AS order_date, month_name AS month, year,
        p.product_type
-FROM sales.customers AS c
-JOIN sales.transactions AS t ON c.customer_code = t.customer_code
-JOIN sales.markets AS m ON m.markets_code = t.market_code
-JOIN sales.date AS d ON d.date = t.order_date
-JOIN sales.products AS p ON p.product_code = t.product_code;
+FROM sales.transactions AS t
+LEFT JOIN sales.customers AS c ON t.customer_code = c.customer_code
+LEFT JOIN sales.markets AS m ON t.market_code = m.markets_code
+LEFT JOIN sales.date AS d ON t.order_date = d.date
+LEFT JOIN sales.products AS p ON t.product_code = p.product_code;
+
+
 #---------------------------------------------------------------
 # Identifying data cleaning steps
 #---------------------------------------------------------------
@@ -78,9 +81,15 @@ FROM sales.atliq_retrieved_sales_data;
 # The customer names are recorded correct.
 SELECT DISTINCT product_type 
 FROM sales.atliq_retrieved_sales_data; 
-# The product types are recorded correct.
+# The product types are recorded correct and there are null values in the attribute.
 #---------------------------------------------------------------
-# The identified data cleaning steps and additional cleaning are done in Tableau.
+# Final atliq retrieved sales data
+#---------------------------------------------------------------
+SELECT * FROM sales.atliq_retrieved_sales_data; # 9 attributes
+SELECT COUNT(*) AS number_of_rows
+FROM sales.atliq_retrieved_sales_data;			# 148395 observations
+#---------------------------------------------------------------
+# The identified data cleaning steps and additional cleaning are done in the data visualisation process.
 #---------------------------------------------------------------
 
 
