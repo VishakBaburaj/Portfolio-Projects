@@ -35,7 +35,7 @@ FROM sales.transactions;			# 148395 observations
 #---------------------------------------------------------------
 # Identifying data cleaning steps in transactions table
 #---------------------------------------------------------------
-# Checking the sales amount and sales qty
+# Checking the sales amount and sales qty attributes
 SELECT sales_amount, sales_qty
 FROM sales.transactions
 WHERE sales_amount <= 0 OR sales_qty <= 0
@@ -90,10 +90,12 @@ FROM sales.products;
 #---------------------------------------------------------------
 # Retrieving necessary data from the sales database based on the objectives.
 #---------------------------------------------------------------
-#CREATE VIEW sales.atliq_retrieved_sales_data
-#AS
+DROP VIEW IF EXISTS sales.atliq_retrieved_sales_data;
+
+CREATE VIEW sales.atliq_retrieved_sales_data
+AS
 SELECT t.sales_amount, sales_qty, currency, 
-	   IF(currency = "USD", sales_amount*75, sales_amount) AS cleaned_sales_amount,
+	   IF(currency = "USD", sales_amount*65, sales_amount) AS cleaned_sales_amount,
        IF(currency = "USD", "INR", currency) AS cleaned_currency,
 	   c.custmer_name AS customer_name,
        m.markets_name,
@@ -106,8 +108,10 @@ LEFT JOIN sales.date AS d ON t.order_date = d.date
 LEFT JOIN sales.products AS p ON t.product_code = p.product_code;
 
 #---------------------------------------------------------------
-# Final atliq retrieved sales data
+# atliq retrieved sales data
 #---------------------------------------------------------------
-SELECT * FROM sales.atliq_retrieved_sales_data; # 9 attributes
+SELECT * 
+FROM sales.atliq_retrieved_sales_data; # 11 attributes
+
 SELECT COUNT(*) AS number_of_rows
-FROM sales.atliq_retrieved_sales_data;			# 148395 observations
+FROM sales.atliq_retrieved_sales_data; # 148395 observations
