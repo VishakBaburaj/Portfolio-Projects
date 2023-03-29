@@ -33,41 +33,59 @@ FROM sales.transactions;			# 148395 observations
 # The primary keys and the data types are correct.
 
 #---------------------------------------------------------------
-# Identifying data cleaning steps
+# Identifying data cleaning steps in transactions table
 #---------------------------------------------------------------
-# Checking whether all the sales amount is in one format (INR)
-SELECT DISTINCT currency 
-FROM sales.transactions; 
-# There are 2 types of currency (USD and INR).
+# Checking the sales amount and sales qty
+SELECT sales_amount, sales_qty
+FROM sales.transactions
+WHERE sales_amount <= 0 OR sales_qty <= 0
+GROUP BY sales_amount, sales_qty;
 
-# Checking the order date to identify the conversion rate.
-SELECT t.order_date, sales_amount, currency, m.markets_name
-FROM sales.transactions t
-LEFT JOIN sales.markets AS m ON t.market_code = m.markets_code
-WHERE currency = "USD";
+# Checking whether all the sales amount is in one format (INR)
+SELECT order_date, sales_amount, sales_qty, currency 
+FROM sales.transactions
+WHERE currency != "INR"
+GROUP BY order_date, sales_amount, sales_qty, currency; 
+# There are 2 observations with USD currency.
 # On 2017-11-20 the USD to INR conversion rate was 65.0372 INR
 # On 2017-11-22 the USD to INR conversion rate was 64.7843 INR
 
+#---------------------------------------------------------------
+# Identifying data cleaning steps in markets table
+#---------------------------------------------------------------
 # The markets name or the cities consists of Paris and New york.
 SELECT t.order_date, sales_amount, currency, m.markets_name
 FROM sales.transactions t
 LEFT JOIN sales.markets AS m ON t.market_code = m.markets_code
-WHERE markets_name = "Paris" OR "New York";
+WHERE markets_name = "Paris" OR "New York"
+GROUP BY t.order_date, sales_amount, currency, m.markets_name;
 # There are no transactions recorded for Paris and New York markets.
 
-# Checking other atrributes.
+#---------------------------------------------------------------
+# Identifying data cleaning steps in date table
+#---------------------------------------------------------------
+# Checking month atrribute.
 SELECT DISTINCT month_name
 FROM sales.date; 
 # The months are recorded correct.
+# Checking year atrribute.
 SELECT DISTINCT year 
 FROM sales.date; 
 # The years are recorded correct.
+
+#---------------------------------------------------------------
+# Identifying data cleaning steps in customers table
+#---------------------------------------------------------------
 SELECT DISTINCT custmer_name 
 FROM sales.customers; 
-# The customer names are recorded correct.
+# The customer names are recorded correct but need to rename the custmer_name attribute.
+
+#---------------------------------------------------------------
+# Identifying data cleaning steps in products table
+#---------------------------------------------------------------
 SELECT DISTINCT product_type 
 FROM sales.products; 
-# The product types are recorded correct and there are null values in the attribute.
+# The product types are recorded correct.
 
 #---------------------------------------------------------------
 # Retrieving necessary data from the sales database based on the objectives.
@@ -77,7 +95,7 @@ FROM sales.products;
 SELECT t.sales_amount, sales_qty, currency, 
 	   IF(currency = "USD", sales_amount*75, sales_amount) AS cleaned_sales_amount,
        IF(currency = "USD", "INR", currency) AS cleaned_currency,
-	   c.custmer_name,
+	   c.custmer_name AS customer_name,
        m.markets_name,
        d.date AS order_date, month_name AS month, year,
        p.product_type
