@@ -25,25 +25,39 @@ https://app.powerbi.com/view?r=eyJrIjoiMWIzOGI2NDgtZGE2YS00MTYzLWEzYzItZGM1MWQ4M
 * The dataset contains 630 rows and 28 columns.
 
 ## Data Cleaning and Manipulation
+
 The following steps were taken to clean and prepare the survey data for analysis:
+
 Step 1: Duplicated the survey data in Google Sheets to ensure that the original data remained unaltered during the cleaning process.
+
 Step 2: 1. Deleted irrelevant columns, assigned filters, and renamed remaining columns for clarity.
+
 Step 3:
+
 Cleaned the “Current Roles” column by creating a new “Other Roles” column by using the “Split Text to Columns” function.
 Grouped other related roles into the “Current Roles” category and corrected spelling errors by using the find and replace tool.
 Added a new column called “Current roles cleaned” which consists of all the “Current Roles” with the “Other Roles” that were grouped under the “Current Roles” category.
+
 Step 4: Used a pivot table to determine the distribution of current roles in the sample size.
 ![](https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.1.png)
+
 Step 5:
+
 Cleaned the “Country” column by creating a new “Other Country” column by using the “Split Text to Columns” function.
 Grouped countries, and corrected spelling errors by using the find and replace tool.
 Added a new column called “Country Cleaned” which consists of the “Country” column with the “Other Country” column that was grouped.
+
 Step 6: Used a pivot table to determine the distribution of countries in the sample size.
 ![](https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Fig%203.2.png)
+
 Step 7: Cleaned the “Favorite Programming Language” column by separating the “Other Favorite Programming Language” using the “Split Text to Columns” function.
+
 Step 8: Filtered and copied all data analyst respondents to another sheet to narrow down data to the project objective for further analysis.
+
 Step 9: Deleted columns that were added to clean certain columns and renamed the remaining columns for clarity.
+
 Step 10:
+
 Used conditional formatting to identify missing values in the data analyst dataset.
 The missing values in the “Highest Level of Education” attribute were replaced with “Null.
 Conditional formatting revealed that 4 observations had null values in both the “Work-Life Balance” and “Upward Mobility” columns. Additionally, there were 3 observations that had missing values only in the “Upward Mobility” column.
@@ -51,13 +65,19 @@ It was determined that since these 7 observations were not from the United State
 
 ## Data Analysis
 The total number of data analyst respondents from the United States was determined by creating a card visualization.
+
 The average age of data analyst respondents from the United States was determined by creating a card visualization.
+
 The start and end dates of the data collection were determined by creating card visualizations.
+
 The average satisfaction levels with upward mobility and work-life balance among data analysts in the United States were determined by creating gauge visualizations.
+
 The preferred programming languages among data analysts in the United States were determined by creating a bar graph visualization.
+
 The difficulty of transitioning into a data analyst role from a different career path in the United States was determined by creating a 100% stacked bar chart visualization.
 
 Note: In order to custom sort the 100% stacked bar chart the following source was referred.
+
 https://devoworx.net/power-bi-custom-sort-order-bar-chart/
 
 To further analyze the data, the following questions were answered:
