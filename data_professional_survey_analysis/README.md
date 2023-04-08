@@ -11,11 +11,11 @@ As an entry-level data analyst with F1 OPT work authorization in the United Stat
 * Entry-level data analysts in the United States.
 * General public in the United States.
 
-## Google Sheet
+## Google Sheet Link
 https://docs.google.com/spreadsheets/d/1rau8clY4md4wYJyrEekmnjRKfGZL37iF/edit#gid=1128230716
 
-## Dashboard
-https://app.powerbi.com/view?r=eyJrIjoiMWIzOGI2NDgtZGE2YS00MTYzLWEzYzItZGM1MWQ4MTUxMDA3IiwidCI6ImI4ZTNmM2I3LWNkNGUtNDI0Ny1hOGIwLWEwZGIxOTYwODZmMiIsImMiOjF9
+## Dashboard Link
+https://app.powerbi.com/view?r=eyJrIjoiMmJiZjdhM2MtNjg1MS00OGM1LThjZDUtMDQ3NTE4MTgwNTE3IiwidCI6IjllNDc3ZmVjLWFkMjYtNGJiMy1hNDk3LWI2NGMyYWRlYjc0OCJ9
 
 ![](https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/data_professional_survey_analysis/Figures/Dashboard.png)
 
