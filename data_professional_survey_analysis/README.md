@@ -30,7 +30,7 @@ The following steps were taken to clean and prepare the survey data for analysis
 
 Step 1: Duplicated the survey data in Google Sheets to ensure that the original data remained unaltered during the cleaning process.
 
-Step 2: 1. Deleted irrelevant columns, assigned filters, and renamed remaining columns for clarity.
+Step 2: Deleted irrelevant columns, assigned filters, and renamed remaining columns for clarity.
 
 Step 3:
 
