@@ -8,6 +8,13 @@ st.set_page_config(page_title = 'LinkedIn Data Analysis',
                    page_icon=None,
                    layout = 'centered', initial_sidebar_state="auto")
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+# if st.sidebar.button('About'):
+#     st.title('About the app')
+
+# # Adding a horizontal line
+# st.sidebar.markdown('---')
+
 # Setting the first level sidebar options
 options_level_1 = ['LinkedIn','Instagram']
 selected_option_level_1 = st.sidebar.radio('Choose an application', options_level_1)
@@ -129,7 +136,7 @@ if selected_option_level_1 == 'LinkedIn':
 # If the selected option is "Instagram", display the second level of the sidebar
 elif selected_option_level_1 == 'Instagram':
     options_level_2_for_instagram = ['Option 1', 'Option 2']
-    selected_option_level_2_for_instagram = st.sidebar.radio('', options_level_2_for_instagram)
+    selected_option_level_2_for_instagram = st.sidebar.radio('Choose an insight', options_level_2_for_instagram)
 
     # Setting sidebar "Instagram" - "Option 1"
     if selected_option_level_2_for_instagram  == 'Option 1':
