@@ -72,34 +72,15 @@ if selected_option_level_1 == 'LinkedIn':
             st.write('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
+
             # Total jobs applied
             total_jobs_applied = len(data)
 
-            df = pd.DataFrame({
-                'Metric': ['Total Jobs Applied'],
-                'Value': [total_jobs_applied]
-            })
-
-            # Creating the chart
-            bar = alt.Chart(df).mark_bar().encode(
-                x=alt.X('Value:Q', title=''),
-                y=alt.Y('Metric:N', title=''),
-                color=alt.Color('Metric:N', title='', legend=None, scale=alt.Scale(scheme='tableau10'))
-            )
-
-            # Adding labels
-            text = bar.mark_text(
-                align='left',
-                baseline='middle',
-                dx=5,
-                fontSize=16,
-                color='white'
-            ).encode(
-                text='Value:Q'
-            )
-
-            # Displaying the chart
-            st.altair_chart(bar + text, use_container_width=True)
+            # Displaying the total count of jobs applied as a KPI
+            if total_jobs_applied >= 0:
+                st.success(f"**Total Jobs Applied:** {total_jobs_applied}")
+            else:
+                st.error(f"**Total Jobs Applied:** {total_jobs_applied}")
 
             # Adding a horizontal line
             st.write('---')
@@ -118,7 +99,7 @@ if selected_option_level_1 == 'LinkedIn':
                 y=alt.Y('Job Title:O', title='Job Title', sort='-x'),
                 color=alt.Color('count:Q', legend=None)
             ).properties(
-                title='Top Jobs Titles Applied'
+                title='Top 10 Job Titles Applied'
             )
 
             # Adding labels for the count of jobs applied
@@ -133,6 +114,9 @@ if selected_option_level_1 == 'LinkedIn':
 
             # Displaying the chart and the count of jobs applied
             st.altair_chart(chart + text, use_container_width=True)
+
+            # Adding a horizontal line
+            st.write('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
             
@@ -178,11 +162,8 @@ if selected_option_level_1 == 'LinkedIn':
 
             daily_app_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
 
-            st.write(f"###### Daily Job Applications")
+            st.write(f"###### Daily Job Applications Sent")
             st.altair_chart(daily_app_chart, use_container_width=True)
-
-            # Adding a horizontal line
-            st.write('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
     # Setting sidebar "LinkedIn" - "LinkedIn Connections Insights"
