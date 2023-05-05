@@ -2,18 +2,38 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import altair as alt
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 # Setting the page title and layout
 st.set_page_config(page_title = 'LinkedIn Data Analysis',
                    page_icon=None,
                    layout = 'centered', initial_sidebar_state="auto")
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
+# Data Processing Function for LinkedIn Job Application Data
+def process_linkedin_job_app_data(uploaded_file):
+    # Reading the CSV file
+    data = pd.read_csv(uploaded_file)
+    # Droping sensitive data
+    data = data[['Application Date', 'Company Name', 'Job Title']]
+    # Droping duplicate rows
+    data.drop_duplicates(keep='first', inplace=True)
+    # Splitting the date and time column into separate columns
+    split_df = data['Application Date'].str.split(' ', expand=True)
+    # Assigning new column names
+    split_df.columns = ['Date', 'Time', 'AM/PM']
+    # Replacing missing or null values with NaN
+    split_df = split_df.replace('', pd.NA)
+    # Concatenating the split DataFrame with the original DataFrame
+    data = pd.concat([data, split_df], axis=1)
+    # Droping the 'Application Date', 'Time' and 'AM/PM' columns in place
+    data.drop(columns=['Application Date', 'Time', 'AM/PM'], inplace=True)
+    # Converting the 'Date' column to a datetime data type
+    data['Date'] = pd.to_datetime(data['Date'])
+    # Droping the index column from the DataFrame
+    data = data.reset_index(drop=True)
+    return data
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-# if st.sidebar.button('About'):
-#     st.title('About the app')
-
-# # Adding a horizontal line
-# st.sidebar.markdown('---')
 
 # Setting the first level sidebar options
 options_level_1 = ['LinkedIn','Instagram']
@@ -31,7 +51,7 @@ if selected_option_level_1 == 'LinkedIn':
     if selected_option_level_2_for_linkedin  == 'LinkedIn Job Application':
 
         # Setting title of the page
-        st.title('LinkedIn Job Application')
+        st.markdown('## LinkedIn Job Application')
 
         st.set_option('deprecation.showfileUploaderEncoding', False)  # Disable warning message
 
@@ -41,39 +61,8 @@ if selected_option_level_1 == 'LinkedIn':
         # After uploading the csv data
         if uploaded_file is not None:
 
-            # Reading the CSV file
-            data = pd.read_csv(uploaded_file)
-
-            # Processing the data
-
-            # Droping sensitive data
-            data = data[['Application Date',
-                        'Company Name', 
-                        'Job Title']]
-            
-            # Droping duplicate rows
-            data.drop_duplicates(keep = 'first', inplace = True)
-
-            # Splitting the date and time column into separate columns
-            split_df = data['Application Date'].str.split(' ', expand = True)
-
-            # Assigning new column names
-            split_df.columns = ['Date', 'Time', 'AM/PM']
-
-            # Replacing missing or null values with NaN
-            split_df = split_df.replace('', pd.NA)
-
-            # Concatenating the split DataFrame with the original DataFrame
-            data = pd.concat([data, split_df], axis=1)
-
-            # Droping the 'Application Date', 'Time' and 'AM/PM' columns in place
-            data.drop(columns = ['Application Date', 'Time', 'AM/PM'], inplace = True)
-
-            # Converting the 'Date' column to a datetime data type
-            data['Date'] = pd.to_datetime(data['Date'])
-
-            # Droping the index column from the DataFrame
-            data = data.reset_index(drop=True)
+            # Precessing the data
+            data = process_linkedin_job_app_data(uploaded_file)
 
             # Job application dashboard
 
@@ -108,7 +97,6 @@ if selected_option_level_1 == 'LinkedIn':
             st.write('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
-            st.markdown('Top jobs titles applied')
             # Grouping the data by job title and counting the number of occurrences
             jobs_applied = data.groupby('Job Title').size().reset_index(name='count')
 
@@ -118,10 +106,31 @@ if selected_option_level_1 == 'LinkedIn':
             # Sorting the top jobs by count in descending order
             top_jobs_applied = top_jobs_applied.sort_values("count", ascending=True)
 
-            # Plotting the horizontal bar chart using Plotly Express
-            fig = px.bar(top_jobs_applied, x='count', y='Job Title', orientation='h', color='count')
-            fig.update_layout(width=800, height=500)
-            st.plotly_chart(fig)
+            # Creating the chart
+            chart = alt.Chart(top_jobs_applied).mark_bar().encode(
+                x=alt.X('count:Q', title='Count of Jobs Applied'),
+                y=alt.Y('Job Title:O', title='Job Title', sort='-x'),
+                color=alt.Color('count:Q', legend=None)
+            ).properties(
+                width=700,
+                height=400,
+                title='Top Jobs Titles Applied'
+            ) 
+
+            # Adding labels for the count of jobs applied
+            text = chart.mark_text(
+                align='left',
+                baseline='middle',
+                dx=5,
+                fontSize=18
+            ).encode(
+                text='count:Q'
+            )
+
+            # Displaying the chart and the count of jobs applied
+            st.altair_chart(chart + text, use_container_width=True)
+                 
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
     # Setting sidebar "LinkedIn" - "LinkedIn Connections Insights"
     elif selected_option_level_2_for_linkedin  == 'LinkedIn Connections':
