@@ -97,7 +97,8 @@ if selected_option_level_1 == 'LinkedIn':
             chart = alt.Chart(top_jobs_applied).mark_bar().encode(
                 x=alt.X('count:Q', title='Count of Jobs Applied'),
                 y=alt.Y('Job Title:O', title='Job Title', sort='-x'),
-                color=alt.Color('count:Q', legend=None)
+                color=alt.Color('count:Q', legend=None),
+                tooltip=['Job Title:O', 'count:Q']
             ).properties(
                 title='Top 10 Job Titles Applied'
             )
@@ -137,27 +138,21 @@ if selected_option_level_1 == 'LinkedIn':
             )
 
             lines = (
-                alt.Chart(source)
-                .mark_line(point="transparent")
-                .encode(x=alt.X(x, title="Date", axis=alt.Axis(labelFontSize=15, titleFontSize=15)), 
-                        y=alt.Y(y, title="Count of Jobs Applied", axis=alt.Axis(labelFontSize=15, titleFontSize=15))
-                        )
-                .transform_calculate(color='datum.delta < 0 ? "red" : "lightblue"') # doesn't show red for negative delta
+                alt.Chart(source).mark_line(point="transparent").encode(
+                    x=alt.X(x, title="Date", axis=alt.Axis(labelFontSize=15, titleFontSize=15)), 
+                    y=alt.Y(y, title="Count of Jobs Applied", axis=alt.Axis(labelFontSize=15, titleFontSize=15))
+                    ).transform_calculate(color='datum.delta < 0 ? "red" : "lightblue"') # doesn't show red for negative delta
             )
             points = (
-                lines.transform_filter(hover)
-                .mark_circle(size=50)
-                .encode(color=alt.Color("color:N", scale=None))
+                lines.transform_filter(hover).mark_circle(size=50).encode(
+                color=alt.Color("color:N", scale=None))
             )
             tooltips = (
-                alt.Chart(source)
-                .mark_rule(opacity=0)
-                .encode(
+                alt.Chart(source).mark_rule(opacity=0).encode(
                     x=x,
                     y=y,
-                    tooltip=[y, x],
-                )
-                .add_selection(hover)
+                    tooltip=[x, y],
+                ).add_selection(hover)
             )
 
             daily_app_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
@@ -170,9 +165,12 @@ if selected_option_level_1 == 'LinkedIn':
     elif selected_option_level_2_for_linkedin  == 'LinkedIn Connections':
 
         # Setting title of the page
-        st.title('LinkedIn Connections')
+        st.markdown('## LinkedIn Connections')
 
         st.set_option('deprecation.showfileUploaderEncoding', False)  # Disable warning message
+
+
+
 
 
 
