@@ -1,14 +1,16 @@
 # Importing libraries
 import streamlit as st
 import pandas as pd
-import plotly.express as px
 import altair as alt
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Setting the page title and layout
 st.set_page_config(page_title = 'LinkedIn Data Analysis',
                    page_icon=None,
                    layout = 'centered', initial_sidebar_state="auto")
+
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 # Data Processing Function for LinkedIn Job Application Data
 def process_linkedin_job_app_data(uploaded_file):
     # Reading the CSV file
@@ -32,8 +34,8 @@ def process_linkedin_job_app_data(uploaded_file):
     # Droping the index column from the DataFrame
     data = data.reset_index(drop=True)
     return data
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Setting the first level sidebar options
 options_level_1 = ['LinkedIn','Instagram']
@@ -42,12 +44,14 @@ selected_option_level_1 = st.sidebar.radio('Choose an application', options_leve
 # Adding a horizontal line between the first and second level options
 st.sidebar.markdown('---')
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 # If the selected option is "LinkedIn", display the second level of the sidebar
 if selected_option_level_1 == 'LinkedIn':
     options_level_2_for_linkedin = ['LinkedIn Job Application', 'LinkedIn Connections']
     selected_option_level_2_for_linkedin = st.sidebar.radio('Choose an insight', options_level_2_for_linkedin)
 
-    # Setting sidebar "LinkedIn" - "LinkedIn Job Application Tracker"
+    # Setting sidebar "LinkedIn" - "LinkedIn Job Application"
     if selected_option_level_2_for_linkedin  == 'LinkedIn Job Application':
 
         # Setting title of the page
@@ -64,8 +68,6 @@ if selected_option_level_1 == 'LinkedIn':
             # Precessing the data
             data = process_linkedin_job_app_data(uploaded_file)
 
-            # Job application dashboard
-
             # Adding a horizontal line
             st.write('---')
 
@@ -73,38 +75,93 @@ if selected_option_level_1 == 'LinkedIn':
             # Total jobs applied
             total_jobs_applied = len(data)
 
-            # Displaying the total count of jobs applied as a KPI
-            if total_jobs_applied >= 0:
-                st.success(f"**Total Jobs Applied:** {total_jobs_applied}")
-            else:
-                st.error(f"**Total Jobs Applied:** {total_jobs_applied}")
+            df = pd.DataFrame({
+                'Metric': ['Total Jobs Applied'],
+                'Value': [total_jobs_applied]
+            })
+
+            # Creating the chart
+            bar = alt.Chart(df).mark_bar().encode(
+                x=alt.X('Value:Q', title=''),
+                y=alt.Y('Metric:N', title=''),
+                color=alt.Color('Metric:N', title='', legend=None, scale=alt.Scale(scheme='tableau10'))
+            )
+
+            # Adding labels
+            text = bar.mark_text(
+                align='left',
+                baseline='middle',
+                dx=5,
+                fontSize=16,
+                color='white'
+            ).encode(
+                text='Value:Q'
+            )
+
+            # Displaying the chart
+            st.altair_chart(bar + text, use_container_width=True)
 
             # Adding a horizontal line
             st.write('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
-            st.markdown('Daily applications sent')
+            
             # Grouping the DataFrame by the date column and counting the number of applications for each day
             daily_applications = data.groupby('Date').size().reset_index(name='count')
 
-            # Ploting the data using a line chart
-            daily_applications_sent = px.line(daily_applications, x = 'Date', y = 'count', color_discrete_sequence=["#FF8C00"])
+            # Daily trend line chart
+            source = daily_applications
+            x = 'Date'
+            y = 'count'
+            # color = 'keywords'
+            selector = alt.selection_single(encodings=['x', 'y'])
+            hover = alt.selection_single(
+                fields=[x],
+                nearest=True,
+                on="mouseover",
+                empty="none",
+            )
 
-            # Displaying the chart using streamlit
-            st.plotly_chart(daily_applications_sent, use_container_width=True)
+            lines = (
+                alt.Chart(source)
+                .mark_line(point="transparent")
+                .encode(x=alt.X(x, title="Date", axis=alt.Axis(labelFontSize=15, titleFontSize=17)), 
+                    y=alt.Y(y, title="Count of Jobs Applied", 
+                    axis=alt.Axis(labelFontSize=17, titleFontSize=17)),
+                    )
+                .transform_calculate(color='datum.delta < 0 ? "red" : "lightblue"') # doesn't show red for negative delta
+            )
+            points = (
+                lines.transform_filter(hover)
+                .mark_circle(size=50)
+                .encode(color=alt.Color("color:N", scale=None))
+            )
+            tooltips = (
+                alt.Chart(source)
+                .mark_rule(opacity=0)
+                .encode(
+                    x=x,
+                    y=y,
+                    tooltip=[y, x],
+                )
+                .add_selection(hover)
+            )
+
+            daily_app_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
+
+            st.write(f"###### Daily Job Applications")
+            st.altair_chart(daily_app_chart, use_container_width=True)
 
             # Adding a horizontal line
             st.write('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
+
             # Grouping the data by job title and counting the number of occurrences
             jobs_applied = data.groupby('Job Title').size().reset_index(name='count')
 
             # Sorting the data by count in descending order and selecting the top 10 rows
             top_jobs_applied = jobs_applied.sort_values("count", ascending=False).head(10)
-
-            # Sorting the top jobs by count in descending order
-            top_jobs_applied = top_jobs_applied.sort_values("count", ascending=True)
 
             # Creating the chart
             chart = alt.Chart(top_jobs_applied).mark_bar().encode(
@@ -112,10 +169,8 @@ if selected_option_level_1 == 'LinkedIn':
                 y=alt.Y('Job Title:O', title='Job Title', sort='-x'),
                 color=alt.Color('count:Q', legend=None)
             ).properties(
-                width=700,
-                height=400,
                 title='Top Jobs Titles Applied'
-            ) 
+            )
 
             # Adding labels for the count of jobs applied
             text = chart.mark_text(
@@ -129,7 +184,6 @@ if selected_option_level_1 == 'LinkedIn':
 
             # Displaying the chart and the count of jobs applied
             st.altair_chart(chart + text, use_container_width=True)
-                 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
     # Setting sidebar "LinkedIn" - "LinkedIn Connections Insights"
