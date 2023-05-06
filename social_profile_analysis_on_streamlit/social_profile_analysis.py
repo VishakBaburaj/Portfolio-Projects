@@ -73,7 +73,7 @@ elif selected_option_level_1 == 'LinkedIn':
         load_sample_data_checkbox = st.checkbox('Load Sample Data')
 
         # Reading sample csv data
-        df = pd.read_csv('Job Applications.csv') 
+        df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/social_profile_analysis_on_streamlit/sample_data/Job Applications.csv") 
 
         # If the sample data checkbox is selected upload the sample data
         if load_sample_data_checkbox:
@@ -119,11 +119,45 @@ elif selected_option_level_1 == 'LinkedIn':
             # Creating the chart
             chart = alt.Chart(top_jobs_applied).mark_bar().encode(
                 x=alt.X('count:Q', title='Count of Jobs Applied'),
-                y=alt.Y('Job Title:O', title='Job Title', sort='-x'),
+                y=alt.Y('Job Title:O', title='Job Titles', sort='-x'),
                 color=alt.Color('count:Q', legend=None),
                 tooltip=['Job Title:O', 'count:Q']
             ).properties(
-                title='Top 10 Job Titles Applied'
+                title='Top 10 Jobs Applied'
+            )
+
+            # Adding labels for the count of jobs applied
+            text = chart.mark_text(
+                align='left',
+                baseline='middle',
+                dx=5,
+                fontSize=18
+            ).encode(
+                text='count:Q'
+            )
+
+            # Displaying the chart and the count of jobs applied
+            st.altair_chart(chart + text, use_container_width=True)
+
+            # Adding a horizontal line
+            st.write('---')
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+            # Grouping the data by job title and counting the number of occurrences
+            companies_applied = data.groupby('Company Name').size().reset_index(name='count')
+
+            # Sorting the data by count in descending order and selecting the top 10 rows
+            top_companies_applied = companies_applied.sort_values("count", ascending=False).head(10)
+
+            # Creating the chart
+            chart = alt.Chart(top_companies_applied).mark_bar().encode(
+                x=alt.X('count:Q', title='Count of Companies Applied'),
+                y=alt.Y('Company Name:O', title='Company Names', sort='-x'),
+                color=alt.Color('count:Q', legend=None),
+                tooltip=['Company Name:O', 'count:Q']
+            ).properties(
+                title='Top 10 Companies Applied'
             )
 
             # Adding labels for the count of jobs applied
@@ -163,7 +197,7 @@ elif selected_option_level_1 == 'LinkedIn':
             lines = (
                 alt.Chart(source).mark_line(point="transparent").encode(
                     x=alt.X(x, title="Date", axis=alt.Axis(labelFontSize=15, titleFontSize=15)), 
-                    y=alt.Y(y, title="Count of Jobs Applied", axis=alt.Axis(labelFontSize=15, titleFontSize=15))
+                    y=alt.Y(y, title="Count of Applications sent", axis=alt.Axis(labelFontSize=15, titleFontSize=15))
                     ).transform_calculate(color='datum.delta < 0 ? "red" : "lightblue"') # doesn't show red for negative delta
             )
             points = (
@@ -180,7 +214,7 @@ elif selected_option_level_1 == 'LinkedIn':
 
             daily_app_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
 
-            st.write(f"###### Daily Job Applications Sent")
+            st.write(f"###### Daily Job Applications Trend")
             st.altair_chart(daily_app_chart, use_container_width=True)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
