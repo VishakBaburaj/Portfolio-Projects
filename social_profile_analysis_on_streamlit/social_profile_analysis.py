@@ -12,9 +12,7 @@ st.set_page_config(page_title = 'LinkedIn Data Analysis',
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Data Processing Function for LinkedIn Job Application Data
-def process_linkedin_job_app_data(uploaded_file):
-    # Reading the CSV file
-    data = pd.read_csv(uploaded_file)
+def process_linkedin_job_app_data(data):
     # Droping sensitive data
     data = data[['Application Date', 'Company Name', 'Job Title']]
     # Droping duplicate rows
@@ -37,17 +35,29 @@ def process_linkedin_job_app_data(uploaded_file):
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
+# About page
+about_page = st.sidebar.button('About the app')
+
+# Adding a horizontal line between the about and first level options
+st.sidebar.markdown('---')
+
 # Setting the first level sidebar options
 options_level_1 = ['LinkedIn','Instagram']
-selected_option_level_1 = st.sidebar.radio('Choose an application', options_level_1)
+selected_option_level_1 = st.sidebar.selectbox('Choose an application', options_level_1)
 
 # Adding a horizontal line between the first and second level options
 st.sidebar.markdown('---')
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
+# If the selected option is "About the app", display the 'About the app' page
+if about_page:
+    st.markdown('## About')
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 # If the selected option is "LinkedIn", display the second level of the sidebar
-if selected_option_level_1 == 'LinkedIn':
+elif selected_option_level_1 == 'LinkedIn':
     options_level_2_for_linkedin = ['LinkedIn Job Application', 'LinkedIn Connections']
     selected_option_level_2_for_linkedin = st.sidebar.radio('Choose an insight', options_level_2_for_linkedin)
 
@@ -59,10 +69,23 @@ if selected_option_level_1 == 'LinkedIn':
 
         st.set_option('deprecation.showfileUploaderEncoding', False)  # Disable warning message
 
-        # Uploading the csv data
-        uploaded_file = st.file_uploader('Upload the Job Application CSV file', type = 'csv')
+        # Checkbox to load sample data
+        load_sample_data_checkbox = st.checkbox('Load Sample Data')
 
-        # After uploading the csv data
+        # Reading sample csv data
+        df = pd.read_csv('Job Applications.csv') 
+
+        # If the sample data checkbox is selected upload the sample data
+        if load_sample_data_checkbox:
+            uploaded_file = df  # Display the sample data in the app
+
+        # If the sample data checkbox is not selected upload the csv data
+        elif uploaded_file := st.file_uploader('Choose the Job Application CSV file', type = 'csv'):
+
+            # Reading the CSV file
+            uploaded_file = pd.read_csv(uploaded_file)
+
+        # When either data is has been input
         if uploaded_file is not None:
 
             # Precessing the data
@@ -170,22 +193,22 @@ if selected_option_level_1 == 'LinkedIn':
         st.set_option('deprecation.showfileUploaderEncoding', False)  # Disable warning message
 
 
-
-
-
-
 # If the selected option is "Instagram", display the second level of the sidebar
 elif selected_option_level_1 == 'Instagram':
-    options_level_2_for_instagram = ['Option 1', 'Option 2']
+    options_level_2_for_instagram = ['Post', 'Reel']
     selected_option_level_2_for_instagram = st.sidebar.radio('Choose an insight', options_level_2_for_instagram)
 
     # Setting sidebar "Instagram" - "Option 1"
-    if selected_option_level_2_for_instagram  == 'Option 1':
-        st.write('Coming Soon')
+    if selected_option_level_2_for_instagram  == 'Post':
+        st.markdown('## Coming Soon')
 
 
     # Setting sidebar "Instagram" - "Option 2"
-    elif selected_option_level_2_for_instagram  == 'Option 2':
-        st.write('Coming Soon')
+    elif selected_option_level_2_for_instagram  == 'Reel':
+        st.markdown('## Coming Soon')
+
+
+
+
 
 
