@@ -67,7 +67,7 @@ def display_kpis(data):
 
     #-----------------------------------------------------------------------------------------
 
-    st.write(f"##### Key metrics:")
+    st.write(f"###### Key metrics:")
 
     # a 3x3 grid the long way to display the KPIs
     with st.container():
@@ -126,8 +126,6 @@ def display_top_10_insights(data):
             text='count:Q'
         )
 
-        st.write(f"##### Top 10 Job Roles Applied")
-
         # Displaying the chart and the count of jobs applied
         st.altair_chart(top_jobs_applied_chart + top_jobs_applied_text, use_container_width=True)
 
@@ -160,8 +158,6 @@ def display_top_10_insights(data):
         ).encode(
             text='count:Q'
         )
-
-        st.write(f"##### Top 10 Companies Applied")
 
         # Displaying the chart and the count of companies applied
         st.altair_chart(top_companies_applied_chart + top_companies_applied_text, use_container_width=True)
@@ -220,7 +216,6 @@ def display_daily_weekly_monthly_insights(data):
 
         daily_application_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
 
-        st.write(f"##### Daily Job Application Trend")
         st.altair_chart(daily_application_chart, use_container_width=True)
 
     #-----------------------------------------------------------------------------------------
@@ -235,8 +230,6 @@ def display_daily_weekly_monthly_insights(data):
         # Sort by weekday
         weekly_jobs_applied['Weekday'] = weekly_jobs_applied['Weekday'].astype(weekday_order)
         weekly_jobs_applied = weekly_jobs_applied.sort_values('Weekday')
-        
-        st.write(f"##### Weekly Job Application Trend")
 
         # Creating a dropdown filters for year
         weekly_jobs_applied_selected_year = st.selectbox('Select year:', options=weekly_jobs_applied['Year'].unique(), index=0)
@@ -274,8 +267,6 @@ def display_daily_weekly_monthly_insights(data):
         # Create a new column that combines the Year and Month columns
         monthly_jobs_applied['YearMonth'] = pd.to_datetime(monthly_jobs_applied['Year'].astype(str) + ' ' + monthly_jobs_applied['Month'], format='%Y %B')
         monthly_jobs_applied = monthly_jobs_applied.sort_values('YearMonth')
-
-        st.write(f"##### Monthly Job Application Trend")
 
         # Creating a dropdown filters for year
         monthly_jobs_applied_selected_year = st.selectbox('Select year:', options=monthly_jobs_applied['Year'].unique(), index=0)
