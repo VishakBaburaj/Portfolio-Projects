@@ -6,7 +6,7 @@ import altair as alt
 #------------------------------------------------------------------------------------------------------------------------------------------------
 # Processing the data
 def process_linkedin_job_app_data(data):
-
+    # Processing the data
     # Droping sensitive data
     data = data[['Application Date', 'Company Name', 'Job Title']]
     # Droping duplicate rows
@@ -29,37 +29,50 @@ def process_linkedin_job_app_data(data):
     data['Weekday'] = data['Date'].dt.day_name()
     data['Month'] = data['Date'].dt.strftime('%B')
     data['Year'] = data['Date'].dt.year
-
     return data
 
 #------------------------------------------------------------------------------------------------------------------------------------------------
 # Displaying the KPIs
 def display_kpis(data):
-
-    # Divide the screen into two equal parts
-    col1, col2 = st.columns(2)
-
+    #-----------------------------------------------------------------------------------------
     # Total jobs applied KPI
     total_jobs_applied = len(data)
 
-    # Displaying the total count of jobs applied as a KPI in the first column
-    if total_jobs_applied >= 0:
-        col1.success(f"**Total Jobs Applied:** {total_jobs_applied}")
-    else:
-        col1.error(f"**Total Jobs Applied:** {total_jobs_applied}")
+    # Calculating the number of unique companies applied as a KPI in the second column
+    unique_companies_applied = len(data['Company Name'].unique())
 
     # Average jobs applied per day KPI
     # Calculating the number of days over which the jobs were applied
     num_days = (data['Date'].max() - data['Date'].min()).days + 1
 
     # Calculating the average jobs applied per day
-    average_jobs_per_day = total_jobs_applied / num_days
+    applications_per_day = total_jobs_applied // num_days
 
-    # Displaying the average jobs applied per day as a KPI in the second column
-    if average_jobs_per_day >= 0:
-        col2.success(f"**Average Jobs Applied Per Day:** {average_jobs_per_day:.0f}")
-    else:
-        col2.error(f"**Average Jobs Applied Per Day:** {average_jobs_per_day:.0f}")
+    # Calculating the average jobs applied per week
+    applications_per_week = total_jobs_applied // (num_days // 7)
+
+    # Calculating the average jobs applied per month
+    applications_per_month = total_jobs_applied // (num_days // 30)
+
+    #-----------------------------------------------------------------------------------------
+
+    # a 2x2 grid the long way
+    with st.container():
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(f"**Average Jobs Applied Per Day:**", applications_per_day)
+        with col2:
+            st.metric(f"**Average Jobs Applied Per Week:**", applications_per_week)
+        with col3:
+            st.metric(f"**Average Jobs Applied Per Month:**", applications_per_month)
+    with st.container():
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric(f"**Total Jobs Applied:**", total_jobs_applied)
+        with col2:
+            st.metric(f"**Unique Companies Applied:**", unique_companies_applied)
+        with col3:
+            st.metric(label="", value="")
 
     # Adding a horizontal line
     st.write('---')
@@ -67,11 +80,12 @@ def display_kpis(data):
 #------------------------------------------------------------------------------------------------------------------------------------------------
 # Displaying the top 10 insights
 def display_top_10_insights(data):
-
+    #-----------------------------------------------------------------------------------------
     # Selecting the job roles and companies
     top_10_options = ['Top 10 Job Roles Applied', 'Top 10 Companies Applied']
     selected_top_10_options = st.radio('###### Select an insight:', top_10_options)
 
+    #-----------------------------------------------------------------------------------------
     # Displaying the selected options
     if selected_top_10_options == 'Top 10 Job Roles Applied':
         # Grouping the data by job title and counting the number of occurrences
@@ -106,8 +120,7 @@ def display_top_10_insights(data):
         # Adding a horizontal line
         st.write('---')
 
-    #----------------------------------------------------------------------------------------------------------------------------------------------
-    
+    #-----------------------------------------------------------------------------------------
     elif selected_top_10_options == 'Top 10 Companies Applied':
 
         # Grouping the data by company name and counting the number of occurrences
@@ -145,11 +158,12 @@ def display_top_10_insights(data):
 #------------------------------------------------------------------------------------------------------------------------------------------------
 # Displaying daily, weekly and monthly insights
 def display_daily_weekly_monthly_insights(data):
-    
+    #-----------------------------------------------------------------------------------------
     # Selecting the insights
     daily_weekly_monthly_options = ['Daily Job Application Trend', 'Weekly Job Application Trend', 'Monthly Job Application Trend']
     selected_daily_weekly_monthly_options = st.radio('###### Select an insight:', daily_weekly_monthly_options)
 
+    #-----------------------------------------------------------------------------------------
     # Displaying the selected options
     if selected_daily_weekly_monthly_options == 'Daily Job Application Trend':
         # Grouping the data by date and counting the number of occurrences
@@ -195,8 +209,7 @@ def display_daily_weekly_monthly_insights(data):
         st.write(f"#### Daily Job Application Trend")
         st.altair_chart(daily_application_chart, use_container_width=True)
 
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
-
+    #-----------------------------------------------------------------------------------------
     elif selected_daily_weekly_monthly_options == 'Weekly Job Application Trend':
         # Define custom sort order for weekdays
         weekday_order = pd.CategoricalDtype(categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], ordered=True)
@@ -238,8 +251,7 @@ def display_daily_weekly_monthly_insights(data):
         # Displaying the chart
         st.altair_chart((weekly_application_chart + weekly_application_text), use_container_width=True)
 
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
-
+    #-----------------------------------------------------------------------------------------
     elif selected_daily_weekly_monthly_options == 'Monthly Job Application Trend':
         # Group the data by year and month, and count the number of applications per month
         monthly_jobs_applied = data.groupby(['Year', 'Month'])['Date'].count().reset_index()
