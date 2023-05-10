@@ -13,7 +13,7 @@ st.set_page_config(page_title = 'LinkedIn Job Application Tracker',
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Setting the sidebar options
-options = ['About the App','LinkedIn Job Application Tracker']
+options = ['About','LinkedIn Job Application Tracker']
 selected_option = st.sidebar.selectbox('Select an option', options)
 
 # Adding a horizontal line in the sidebar
@@ -22,7 +22,7 @@ st.sidebar.markdown('---')
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 # If the selected option is "About", display the 'About the app' page
-if selected_option == 'About the App':
+if selected_option == 'About':
 
     # Setting title of the page
     st.markdown('## About the app')
@@ -42,7 +42,7 @@ elif selected_option == 'LinkedIn Job Application Tracker':
     load_sample_data_checkbox = st.checkbox('Load Sample Data')
 
     # Reading sample csv data
-    df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/linkedin_job_application_tracker_on_streamlit/sample_data/Job Applications.csv") 
+    df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/linkedin_job_application_analysis/sample_data/Job Applications.csv") 
 
     # If the sample data checkbox is selected upload the sample data
     if load_sample_data_checkbox:
