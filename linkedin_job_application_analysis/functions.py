@@ -56,7 +56,9 @@ def display_kpis(data):
 
     #-----------------------------------------------------------------------------------------
 
-    # a 2x2 grid the long way
+    st.write(f"###### Key metrics:")
+
+    # a 3x3 grid the long way to display the KPIs
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:

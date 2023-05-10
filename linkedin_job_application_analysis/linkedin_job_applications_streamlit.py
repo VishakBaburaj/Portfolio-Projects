@@ -39,7 +39,7 @@ elif selected_option == 'LinkedIn Job Application Tracker':
     st.set_option('deprecation.showfileUploaderEncoding', False)
 
     # Checkbox to load sample data
-    load_sample_data_checkbox = st.checkbox('Load Sample Data')
+    load_sample_data_checkbox = st.sidebar.checkbox('Load Sample Data')
 
     # Reading sample csv data
     df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/linkedin_job_application_analysis/sample_data/Job Applications.csv") 
@@ -49,7 +49,7 @@ elif selected_option == 'LinkedIn Job Application Tracker':
         uploaded_file = df  # Display the sample data in the app
 
     # If the sample data checkbox is not selected upload the csv data
-    elif uploaded_file := st.file_uploader('Choose the Job Application CSV file', type = 'csv'):
+    elif uploaded_file := st.sidebar.file_uploader('Choose the Job Application CSV file', type = 'csv'):
 
         # Reading the CSV file
         uploaded_file = pd.read_csv(uploaded_file)
