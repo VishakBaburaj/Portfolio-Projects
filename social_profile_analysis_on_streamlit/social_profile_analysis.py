@@ -1,7 +1,6 @@
 # Importing libraries
 import streamlit as st
 import pandas as pd
-import altair as alt
 from functions import process_linkedin_job_app_data, display_kpis, display_top_10_insights, display_daily_weekly_monthly_insights
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------

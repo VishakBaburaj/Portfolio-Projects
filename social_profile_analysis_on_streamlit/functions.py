@@ -198,7 +198,45 @@ def display_daily_weekly_monthly_insights(data):
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     elif selected_daily_weekly_monthly_options == 'Weekly Job Application Trend':
+        # Define custom sort order for weekdays
+        weekday_order = pd.CategoricalDtype(categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], ordered=True)
+
+        # Group the data by year and month, and count the number of applications per month
+        weekly_jobs_applied = data.groupby(['Year', 'Weekday'])['Date'].count().reset_index()
+        weekly_jobs_applied = weekly_jobs_applied.rename(columns={'Date': 'Count'})
+
+        # Sort by weekday
+        weekly_jobs_applied['Weekday'] = weekly_jobs_applied['Weekday'].astype(weekday_order)
+        weekly_jobs_applied = weekly_jobs_applied.sort_values('Weekday')
+        
         st.write(f"#### Weekly Job Application Trend")
+
+        # Creating a dropdown filters for year
+        weekly_jobs_applied_selected_year = st.selectbox('Select year:', options=weekly_jobs_applied['Year'].unique(), index=0)
+
+        # Creating the year filters
+        weekly_jobs_applied_year_filter = weekly_jobs_applied[weekly_jobs_applied['Year'] == weekly_jobs_applied_selected_year]
+
+        # Creating the bar chart
+        weekly_application_chart = alt.Chart(weekly_jobs_applied_year_filter).mark_bar().encode(
+            x=alt.X('Weekday:N', title='Weekday', sort=None),
+            y=alt.Y('Count:Q', title='Count of Applications Sent'),
+            tooltip=['Year:N', 'Weekday:N', 'Count:Q']
+        )
+            
+        # Add labels to the bars
+        weekly_application_text = weekly_application_chart.mark_text(
+            align='center',
+            baseline='bottom',
+            dy=-5,
+            fontSize=18,
+            color='white'
+        ).encode(
+            text='Count:Q'
+        )
+
+        # Displaying the chart
+        st.altair_chart((weekly_application_chart + weekly_application_text), use_container_width=True)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -223,7 +261,6 @@ def display_daily_weekly_monthly_insights(data):
         monthly_application_chart = alt.Chart(monthly_jobs_applied_year_filter).mark_bar().encode(
             x=alt.X('Month:N', title='Month', sort=None),
             y=alt.Y('Count:Q', title='Count of Applications Sent'),
-            color=alt.Color('Count:Q', title='Year', legend=None),
             tooltip=['Year:N', 'Month:N', 'Count:Q']
         )
             
@@ -232,7 +269,8 @@ def display_daily_weekly_monthly_insights(data):
             align='center',
             baseline='bottom',
             dy=-5,
-            fontSize=18
+            fontSize=18,
+            color='white'
         ).encode(
             text='Count:Q'
         )
