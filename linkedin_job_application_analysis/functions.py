@@ -67,7 +67,7 @@ def display_kpis(data):
 
     #-----------------------------------------------------------------------------------------
 
-    st.write(f"###### Key metrics:")
+    st.write(f"##### Key metrics:")
 
     # a 3x3 grid the long way to display the KPIs
     with st.container():
@@ -97,7 +97,7 @@ def display_top_10_insights(data):
     #-----------------------------------------------------------------------------------------
     # Selecting the job roles and companies
     top_10_options = ['Top 10 Job Roles Applied', 'Top 10 Companies Applied']
-    selected_top_10_options = st.radio('###### Select an insight:', top_10_options)
+    selected_top_10_options = st.radio('###### Select an insight:', top_10_options, horizontal=True)
 
     #-----------------------------------------------------------------------------------------
     # Displaying the selected options
@@ -126,7 +126,7 @@ def display_top_10_insights(data):
             text='count:Q'
         )
 
-        st.write(f"#### Top 10 Job Roles Applied")
+        st.write(f"##### Top 10 Job Roles Applied")
 
         # Displaying the chart and the count of jobs applied
         st.altair_chart(top_jobs_applied_chart + top_jobs_applied_text, use_container_width=True)
@@ -161,7 +161,7 @@ def display_top_10_insights(data):
             text='count:Q'
         )
 
-        st.write(f"#### Top 10 Companies Applied")
+        st.write(f"##### Top 10 Companies Applied")
 
         # Displaying the chart and the count of companies applied
         st.altair_chart(top_companies_applied_chart + top_companies_applied_text, use_container_width=True)
@@ -174,12 +174,12 @@ def display_top_10_insights(data):
 def display_daily_weekly_monthly_insights(data):
     #-----------------------------------------------------------------------------------------
     # Selecting the insights
-    daily_weekly_monthly_options = ['Daily Job Application Trend', 'Weekly Job Application Trend', 'Monthly Job Application Trend']
-    selected_daily_weekly_monthly_options = st.radio('###### Select an insight:', daily_weekly_monthly_options)
+    daily_weekly_monthly_options = ['Daily Application Trend', 'Weekly Application Trend', 'Monthly Application Trend']
+    selected_daily_weekly_monthly_options = st.radio('###### Select an insight:', daily_weekly_monthly_options, horizontal=True)
 
     #-----------------------------------------------------------------------------------------
     # Displaying the selected options
-    if selected_daily_weekly_monthly_options == 'Daily Job Application Trend':
+    if selected_daily_weekly_monthly_options == 'Daily Application Trend':
         # Grouping the data by date and counting the number of occurrences
         daily_jobs_applied = data.groupby('Date').size().reset_index(name='count')
 
@@ -220,11 +220,11 @@ def display_daily_weekly_monthly_insights(data):
 
         daily_application_chart = (lines + points + tooltips).interactive().configure_view(strokeWidth=0)
 
-        st.write(f"#### Daily Job Application Trend")
+        st.write(f"##### Daily Job Application Trend")
         st.altair_chart(daily_application_chart, use_container_width=True)
 
     #-----------------------------------------------------------------------------------------
-    elif selected_daily_weekly_monthly_options == 'Weekly Job Application Trend':
+    elif selected_daily_weekly_monthly_options == 'Weekly Application Trend':
         # Define custom sort order for weekdays
         weekday_order = pd.CategoricalDtype(categories=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], ordered=True)
 
@@ -236,7 +236,7 @@ def display_daily_weekly_monthly_insights(data):
         weekly_jobs_applied['Weekday'] = weekly_jobs_applied['Weekday'].astype(weekday_order)
         weekly_jobs_applied = weekly_jobs_applied.sort_values('Weekday')
         
-        st.write(f"#### Weekly Job Application Trend")
+        st.write(f"##### Weekly Job Application Trend")
 
         # Creating a dropdown filters for year
         weekly_jobs_applied_selected_year = st.selectbox('Select year:', options=weekly_jobs_applied['Year'].unique(), index=0)
@@ -266,7 +266,7 @@ def display_daily_weekly_monthly_insights(data):
         st.altair_chart((weekly_application_chart + weekly_application_text), use_container_width=True)
 
     #-----------------------------------------------------------------------------------------
-    elif selected_daily_weekly_monthly_options == 'Monthly Job Application Trend':
+    elif selected_daily_weekly_monthly_options == 'Monthly Application Trend':
         # Group the data by year and month, and count the number of applications per month
         monthly_jobs_applied = data.groupby(['Year', 'Month'])['Date'].count().reset_index()
         monthly_jobs_applied = monthly_jobs_applied.rename(columns={'Date': 'Count'})
@@ -275,7 +275,7 @@ def display_daily_weekly_monthly_insights(data):
         monthly_jobs_applied['YearMonth'] = pd.to_datetime(monthly_jobs_applied['Year'].astype(str) + ' ' + monthly_jobs_applied['Month'], format='%Y %B')
         monthly_jobs_applied = monthly_jobs_applied.sort_values('YearMonth')
 
-        st.write(f"#### Monthly Job Application Trend")
+        st.write(f"##### Monthly Job Application Trend")
 
         # Creating a dropdown filters for year
         monthly_jobs_applied_selected_year = st.selectbox('Select year:', options=monthly_jobs_applied['Year'].unique(), index=0)
