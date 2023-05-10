@@ -40,6 +40,7 @@ def display_kpis(data):
 
     # Calculating the number of unique companies applied as a KPI in the second column
     unique_companies_applied = len(data['Company Name'].unique())
+    #-----------------------------------------------------------------------------------------
 
     # Average jobs applied per day KPI
     # Calculating the number of days over which the jobs were applied
@@ -53,6 +54,16 @@ def display_kpis(data):
 
     # Calculating the average jobs applied per month
     applications_per_month = total_jobs_applied // (num_days // 30)
+    #-----------------------------------------------------------------------------------------
+
+    # Get the number of interview calls received using a number input
+    interview_calls_received = st.number_input("Enter the number of interviews received to calculate the **Application Response Rate** metric", min_value=0, value=0)
+
+    # Calculate the application response rate
+    if total_jobs_applied > 0:
+        application_response_rate = round((interview_calls_received / total_jobs_applied) * 100, 2)
+    else:
+        application_response_rate = 0
 
     #-----------------------------------------------------------------------------------------
 
@@ -62,19 +73,20 @@ def display_kpis(data):
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
+            st.metric(f"**Application Response Rate:**", application_response_rate)
+        with col2:
+            st.metric(f"**Total Jobs Applied:**", total_jobs_applied)
+        with col3:
+            #st.metric(label="", value="")
+            st.metric(f"**Total Unique Companies Applied:**", unique_companies_applied)
+    with st.container():
+        col1, col2, col3 = st.columns(3)
+        with col1:
             st.metric(f"**Average Jobs Applied Per Day:**", applications_per_day)
         with col2:
             st.metric(f"**Average Jobs Applied Per Week:**", applications_per_week)
         with col3:
             st.metric(f"**Average Jobs Applied Per Month:**", applications_per_month)
-    with st.container():
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric(f"**Total Jobs Applied:**", total_jobs_applied)
-        with col2:
-            st.metric(f"**Unique Companies Applied:**", unique_companies_applied)
-        with col3:
-            st.metric(label="", value="")
 
     # Adding a horizontal line
     st.write('---')
