@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 from linkedin_job_application_analysis import process_linkedin_job_app_data, display_kpis, display_top_10_insights, display_daily_weekly_monthly_insights
+import datetime
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ elif selected_option == 'LinkedIn Job Application Tracker':
     load_sample_data_checkbox = st.sidebar.checkbox('Load Sample Data')
 
     # Reading sample csv data
-    df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/linkedin_job_application_analysis/sample_data/Job Applications.csv") 
+    df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/linkedin_job_application_analysis/sample_data/sample_data.csv") 
 
     # If the sample data checkbox is selected upload the sample data
     if load_sample_data_checkbox:
@@ -98,17 +99,27 @@ elif selected_option == 'LinkedIn Job Application Tracker':
         # Precessing the data
         data = process_linkedin_job_app_data(uploaded_file)
 
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
+        st.sidebar.subheader('Filter dates')
 
-        display_kpis(data)
+        # Determining the earliest date in the data
+        min_date = data['Date'].min().date()
 
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
+        # Adding a date filter
+        start_date = st.sidebar.date_input("Select start date", value=min_date)
+        end_date = st.sidebar.date_input("Select end date")
 
-        display_top_10_insights(data)
+        # Converting start_date and end_date to datetime objects
+        start_date = datetime.datetime.combine(start_date, datetime.datetime.min.time())
+        end_date = datetime.datetime.combine(end_date, datetime.datetime.max.time())
 
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
+        # Apply date filter to the data frame
+        filtered_data = data[(data['Date'] >= start_date) & (data['Date'] <= end_date)]
 
-        display_daily_weekly_monthly_insights(data)
+# # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-# ---------------------------------------------------------------------------------------------------------------------------------------------------
+        display_kpis(filtered_data)
+        display_top_10_insights(filtered_data)
+        display_daily_weekly_monthly_insights(filtered_data)
+
+# # ---------------------------------------------------------------------------------------------------------------------------------------------------
 

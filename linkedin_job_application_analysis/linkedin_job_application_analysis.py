@@ -29,6 +29,8 @@ def process_linkedin_job_app_data(data):
     data['Weekday'] = data['Date'].dt.day_name()
     data['Month'] = data['Date'].dt.strftime('%B')
     data['Year'] = data['Date'].dt.year
+    # Sort the dataframe by "Application Date"
+    data = data.sort_values('Date')
     return data
 
 #------------------------------------------------------------------------------------------------------------------------------------------------
@@ -46,28 +48,11 @@ def display_kpis(data):
     # Calculating the number of days over which the jobs were applied
     num_days = (data['Date'].max() - data['Date'].min()).days + 1
 
-    # Calculating the average jobs applied per day
-    applications_per_day = total_jobs_applied // num_days
-
     # Calculating the average jobs applied per week
     applications_per_week = total_jobs_applied // (num_days // 7)
 
     # Calculating the average jobs applied per month
     applications_per_month = total_jobs_applied // (num_days // 30)
-    #-----------------------------------------------------------------------------------------
-
-    # Adding a horizontal line
-    st.sidebar.write('---')
-
-    # Get the number of interview calls received using a number input
-    interview_calls_received = st.sidebar.number_input("Enter the number of interviews received to calculate the **Application Response Rate** metric", min_value=0, value=0)
-
-    # Calculate the application response rate
-    if total_jobs_applied > 0:
-        application_response_rate = round((interview_calls_received / total_jobs_applied) * 100, 2)
-    else:
-        application_response_rate = 0
-
     #-----------------------------------------------------------------------------------------
 
     st.write(f"###### Key metrics:")
@@ -76,15 +61,17 @@ def display_kpis(data):
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric(f"**Application Response Rate:**", application_response_rate)
+            interview_calls_received = st.number_input('''Enter total jobs interviewed to calculate **Application Response Rate**:''', value=0, min_value=0)
         with col2:
-            st.metric(f"**Total Jobs Applied:**", total_jobs_applied)
+            if total_jobs_applied > 0:
+                application_response_rate = round((interview_calls_received / total_jobs_applied) * 100, 2)
+                st.metric(f"**Application Response Rate:**", application_response_rate)
         with col3:
             st.metric(f"**Total Unique Companies Applied:**", unique_companies_applied)
     with st.container():
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric(f"**Average Jobs Applied Per Day:**", applications_per_day)
+            st.metric(f"**Total Jobs Applied:**", total_jobs_applied)
         with col2:
             st.metric(f"**Average Jobs Applied Per Week:**", applications_per_week)
         with col3:
