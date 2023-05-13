@@ -218,7 +218,7 @@ def display_daily_weekly_monthly_insights(data):
 
         # Sort by weekday
         weekly_jobs_applied['Weekday'] = weekly_jobs_applied['Weekday'].astype(weekday_order)
-        weekly_jobs_applied = weekly_jobs_applied.sort_values('Weekday')
+        weekly_jobs_applied = weekly_jobs_applied.sort_values(['Weekday', 'Year'])
 
         # Creating a dropdown filters for year
         weekly_jobs_applied_selected_year = st.selectbox('Select year:', options=weekly_jobs_applied['Year'].unique(), index=0)

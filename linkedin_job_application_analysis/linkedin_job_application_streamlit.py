@@ -17,8 +17,8 @@ st.set_page_config(page_title = 'LinkedIn Job Application Tracker',
 options = ['About','LinkedIn Job Application Tracker']
 selected_option = st.sidebar.selectbox('Select an option', options)
 
-# Adding a horizontal line in the sidebar
-st.sidebar.markdown('---')
+st.sidebar.write("\n\n\n")
+st.sidebar.write("\n\n\n")
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ elif selected_option == 'LinkedIn Job Application Tracker':
     elif st.markdown('#### Upload Job Application CSV file or Load Sample Data'):
 
         st.markdown('''This dashboard is designed to work exclusively with the Job Application data from LinkedIn. 
-                       To access your data, you will need to request an archive from LinkedIn by following the instructions 
+                       \n To access your data, you will need to request an archive from LinkedIn by following the instructions 
                        provided in this [link](https://www.linkedin.com/help/linkedin/answer/a1339364/downloading-your-account-data?lang=en).
                        \n It usually takes approximately 24 hours to receive your data. However, in the interim, 
                        you can experiment with the job application sample data that is readily available on the app. 
