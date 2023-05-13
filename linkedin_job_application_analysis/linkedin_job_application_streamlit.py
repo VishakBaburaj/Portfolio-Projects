@@ -72,7 +72,7 @@ elif selected_option == 'LinkedIn Job Application Tracker':
     load_sample_data_checkbox = st.sidebar.checkbox('Load Sample Data')
 
     # Reading sample csv data
-    df = pd.read_csv("C:/Users/visha/Documents/Projects/Portfolio Projects/linkedin_job_application_analysis/sample_data/sample_data.csv") 
+    df = pd.read_csv("sample_data.csv") 
 
     # If the sample data checkbox is selected upload the sample data
     if load_sample_data_checkbox:
