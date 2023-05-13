@@ -1,7 +1,7 @@
 # Importing libraries
 import streamlit as st
 import pandas as pd
-from functions import process_linkedin_job_app_data, display_kpis, display_top_10_insights, display_daily_weekly_monthly_insights
+from linkedin_job_application_analysis import process_linkedin_job_app_data, display_kpis, display_top_10_insights, display_daily_weekly_monthly_insights
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -27,22 +27,22 @@ if selected_option == 'About':
     # Setting title of the page
     st.markdown('## About LinkedIn Job Application Tracker')
 
-    st.write('---')
-
     st.markdown('#### Goal:')
 
-    st.write('''The LinkedIn Job Application Tracker is a tool deployed to 
-            help job seekers keep track of their job applications on LinkedIn. 
-            It allows users to track their progress, and get insights into their job search. 
-            The goal of the tool is to help job seekers stay organized and motivated 
-            throughout their job search process.''')
+    st.write('''The LinkedIn Job Application Tracker is a tool deployed to help job seekers keep track of their job applications on LinkedIn. 
+                It allows users to track their progress, and get insights into their job search. 
+                The goal of the tool is to help job seekers stay organized throughout their job search process.''')
 
-    st.markdown('#### Methodology:')
-
-    st.write('''The "LinkedIn Job Application Tracker" page allows users to upload their job application data from LinkedIn 
-            and get insights into their job search, such as key performance indicators, and daily / weekly / monthly insights.
-            The data is stored in a CSV file and is uploaded, processed and displayed in the "LinkedIn Job Application Tracker" page.''')
+    st.markdown('#### How to use:')
     
+    st.write('''**Note** The LinkedIn Job Applications will automatically track easy applied jobs. However, to
+                track applications that you apply for on external career websites or job boards through LinkedIn, 
+                you will need to manually mark them as "Applied".
+                \n 1. Go to the "LinkedIn Job Application Tracker" page.
+                \n 2. Click on the "Browse files" button.
+                \n 3. Select the CSV file that contains your job application data.
+                \n 4. The data will be uploaded, processed, and displayed in the "LinkedIn Job Application Tracker" page.''')
+
     st.markdown('#### Links:')
 
     col1, col2, col3 = st.columns(3)
@@ -64,8 +64,6 @@ elif selected_option == 'LinkedIn Job Application Tracker':
     # Setting title of the page
     st.markdown('## LinkedIn Job Application Tracker')
 
-    st.write('---')
-
     # Disabling the warning message
     st.set_option('deprecation.showfileUploaderEncoding', False)
 
@@ -85,14 +83,14 @@ elif selected_option == 'LinkedIn Job Application Tracker':
         # Reading the CSV file
         uploaded_file = pd.read_csv(uploaded_file)
 
-    elif st.markdown('##### Upload Job Application CSV file or Load Sample Data'):
+    elif st.markdown('#### Upload Job Application CSV file or Load Sample Data'):
 
-        st.markdown('''This dashboard is designed to work exclusively with the Job Application data on LinkedIn. 
-                To access your data, you will need to request an archive from LinkedIn by following the instructions 
-                provided in this [link](https://www.linkedin.com/help/linkedin/answer/a1339364/downloading-your-account-data?lang=en).
-                \n It usually takes approximately 24 hours to receive your data. However, in the interim, 
-                you can experiment with the job application sample data that is readily available on the app. 
-                Simply load the sample data by clicking on the "Load Sample Data" checkbox in the sidebar.''')
+        st.markdown('''This dashboard is designed to work exclusively with the Job Application data from LinkedIn. 
+                       To access your data, you will need to request an archive from LinkedIn by following the instructions 
+                       provided in this [link](https://www.linkedin.com/help/linkedin/answer/a1339364/downloading-your-account-data?lang=en).
+                       \n It usually takes approximately 24 hours to receive your data. However, in the interim, 
+                       you can experiment with the job application sample data that is readily available on the app. 
+                       Simply load the sample data by clicking on the "Load Sample Data" checkbox in the sidebar.''')
 
     # When either data has been input
     if uploaded_file is not None:

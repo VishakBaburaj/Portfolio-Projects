@@ -10,7 +10,7 @@ def process_linkedin_job_app_data(data):
     # Droping sensitive data
     data = data[['Application Date', 'Company Name', 'Job Title']]
     # Droping duplicate rows
-    data.drop_duplicates(keep='first', inplace=True)
+    data = data.drop_duplicates(keep='first')
     # Splitting the date and time column into separate columns
     split_df = data['Application Date'].str.split(' ', expand=True)
     # Assigning new column names
@@ -20,7 +20,7 @@ def process_linkedin_job_app_data(data):
     # Concatenating the split DataFrame with the original DataFrame
     data = pd.concat([data, split_df], axis=1)
     # Droping the 'Application Date', 'Time' and 'AM/PM' columns in place
-    data.drop(columns=['Application Date', 'Time', 'AM/PM'], inplace=True)
+    data = data.drop(columns=['Application Date', 'Time', 'AM/PM'])
     # Converting the 'Date' column to a datetime data type
     data['Date'] = pd.to_datetime(data['Date'])
     # Droping the index from the DataFrame
@@ -56,8 +56,11 @@ def display_kpis(data):
     applications_per_month = total_jobs_applied // (num_days // 30)
     #-----------------------------------------------------------------------------------------
 
+    # Adding a horizontal line
+    st.sidebar.write('---')
+
     # Get the number of interview calls received using a number input
-    interview_calls_received = st.number_input("Enter the number of interviews received to calculate the **Application Response Rate** metric", min_value=0, value=0)
+    interview_calls_received = st.sidebar.number_input("Enter the number of interviews received to calculate the **Application Response Rate** metric", min_value=0, value=0)
 
     # Calculate the application response rate
     if total_jobs_applied > 0:
@@ -77,7 +80,6 @@ def display_kpis(data):
         with col2:
             st.metric(f"**Total Jobs Applied:**", total_jobs_applied)
         with col3:
-            #st.metric(label="", value="")
             st.metric(f"**Total Unique Companies Applied:**", unique_companies_applied)
     with st.container():
         col1, col2, col3 = st.columns(3)
