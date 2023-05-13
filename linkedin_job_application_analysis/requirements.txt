@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 alabaster @ file:///home/ktietz/src/ci/alabaster_1611921544520/work
 altair==4.2.2
 anaconda-client==1.11.0
