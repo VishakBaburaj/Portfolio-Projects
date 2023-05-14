@@ -6,9 +6,7 @@
 * One major challenge faced is the shift in examination practices. It was announced that the class 12 board exams would be conducted offline during the second wave of COVID-19 in an effort to restore the traditional pattern.
 * Thus, this project stands as a platform for the students to research student perspectives.
 
-## Dashboard
-
-https://public.tableau.com/app/profile/vishakbaburaj/viz/SentimentAnalysisonClass12StudentResponses/Dashboard
+## [Dashboard Link](https://public.tableau.com/app/profile/vishakbaburaj/viz/SentimentAnalysisonClass12StudentResponses/Dashboard)
 
 ![](https://github.com/VishakBaburaj/Portfolio-Projects/blob/master/class_12_students_covid_19_analysis/Figures/Dashboard.png)
 
